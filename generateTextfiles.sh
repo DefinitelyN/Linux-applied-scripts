@@ -7,7 +7,7 @@
 
 echo "---"
 echo -n "Enter desired quantity of files (1 to 10): "
-read quantity
+read "quantity"
 quantityCheck=$(expr "$quantity" : "[0-9]*$") # Check for non-empty string and non-digit characters.
 echo "---"
 
@@ -16,7 +16,7 @@ then
 
     dirDefault=$(getent passwd $(whoami) | cut -d: -f6) # Set target directory by default.
     echo -n "Enter path (full) where generated files will be stored (or leave it blank - your home dir will be set): "
-    read dirUser
+    read "dirUser"
     if [[ -z "$dirUser" ]] # Select final working directory.
     then
 	dirWork="$dirDefault"
@@ -39,8 +39,8 @@ then
 	echo "---"
 	if [[ (( $fill = "z" )) || (( $fill = "r" )) ]] # Check for correct answer.
 	then
-	    i=1
-	    while [ $i -le $quantity ]
+	    i=0
+	    while [ $i -lt $quantity ]
 	    do
 		countBlock=0
 		while [ "$countBlock" -le 10 ]
@@ -48,21 +48,25 @@ then
 		    countBlock=$RANDOM
 		    let "countBlock %= 20"
 		done
-		echo "Size of file-"${fill}"-${i} is $countBlock MB."
+		echo "Size of file-${fill}-${i} is $countBlock MB."
 		echo "Generating..."
 		
-		if [[ $fill = "z" ]]
-		then
-		    dd if=/dev/zero of="$dirWork/file-z-${i}" bs=1M count=$countBlock
-		elif [[ $fill = "r" ]]
-		then
-		    dd if=/dev/urandom of="$dirWork/file-"r"-${i}" bs=1M count=$countBlock
-		fi
+		case $fill in
+		    z)
+			dd if=/dev/zero of="$dirWork/file-${fill}-${i}" bs=1M count=$countBlock
+			;;
+		    r)
+			dd if=/dev/urandom of="$dirWork/file-${fill}-${i}" bs=1M count=$countBlock
+			;;
+		esac
 		
 		i=$(($i+1))
 	    done
 	    echo "---"
-	    echo "Generated successfully!"
+	    if [ $i -eq $quantity ]
+	    then
+		echo "Generated successfully!"
+	    fi
 	else
 	    echo "Oops! Incorrect filling type."
 	fi

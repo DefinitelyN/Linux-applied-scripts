@@ -6,12 +6,12 @@
 
 echo "---"
 echo -n "Enter desired length of passwords (8 to 16): "
-read length
+read "length"
 lengthCheck=$(expr "$length" : "[0-9]*$") # Check for non-empty string and non-digit characters.
 echo "---"
 
 echo -n "Enter desired quantity of passwords (1 to 100): "
-read quantity
+read "quantity"
 quantityCheck=$(expr "$quantity" : "[0-9]*$") # Check for non-empty string and non-digit characters.
 echo "---"
 
@@ -38,9 +38,9 @@ then
 	echo -n "" > "$dirWork/GeneratedPasswords.txt"
 	echo "Generating..."
 	tempPass=0
-	i=1
+	i=0
 	echo "Start" > "$dirWork/TEST.txt"
-	while [ $i -le $quantity ]
+	while [ $i -lt $quantity ]
 	do
 	    tempPass=$(head /dev/urandom | tr -dc [:lower:][:upper:][:digit:] | head -c $length)
 	    echo $tempPass >> "$dirWork/TEST.txt"
@@ -50,7 +50,7 @@ then
 		i=$(($i+1))
 	    fi
 	done
-	if [ $i -gt $quantity ]
+	if [ $i -eq $quantity ]
 	then
 	    echo "Generated successfully!"
 	fi
