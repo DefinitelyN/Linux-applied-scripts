@@ -11,7 +11,7 @@ read "quantity"
 quantityCheck=$(expr "$quantity" : "[0-9]*$") # Check for non-empty string and non-digit characters.
 echo "---"
 
-if [[ (( $quantityCheck -gt 0 ))  && (( "$quantity" -ge 1 )) && (( "$quantity" -le 10 )) ]] # Check out-of-range quantity.
+if [[ $quantityCheck -gt 0  && "$quantity" -ge 1 && "$quantity" -le 10 ]] # Check out-of-range quantity.
 then
 
     dirDefault=$(getent passwd $(whoami) | cut -d: -f6) # Set target directory by default.
@@ -37,7 +37,7 @@ then
 	echo -n "Would you like to write files with zero bytes or random characters? (z/r): "
 	read fill
 	echo "---"
-	if [[ (( $fill = "z" )) || (( $fill = "r" )) ]] # Check for correct answer.
+	if [[ $fill = "z" || $fill = "r" ]] # Check for correct answer.
 	then
 	    i=0
 	    while [ $i -lt $quantity ]

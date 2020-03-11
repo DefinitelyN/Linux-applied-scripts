@@ -15,9 +15,8 @@ read "quantity"
 quantityCheck=$(expr "$quantity" : "[0-9]*$") # Check for non-empty string and non-digit characters.
 echo "---"
 
-if [[ (( $lengthCheck -gt 0 )) && (( $quantityCheck -gt 0 )) && \
-(( "$length" -ge 8 )) && (( "$length" -le 16 )) && \
-(( "$quantity" -ge 1 )) && (( "$quantity" -le 100 )) ]] # Check out-of-range length and quantity.
+if [[ $lengthCheck -gt 0 && $quantityCheck -gt 0 && "$length" -ge 8 && "$length" -le 16 && \
+"$quantity" -ge 1 && "$quantity" -le 100 ]] # Check out-of-range length and quantity.
 then
     dirDefault=$(getent passwd $(whoami) | cut -d: -f6) # Set target directory by default.
     echo -n "Enter path (full) where the file with generated passwords will be stored (or leave it blank - your home dir will be set): "
