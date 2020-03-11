@@ -1,7 +1,5 @@
-# /etc/systemd/system/
-
 [Unit]
-Description=Logging system data and time, logged-in users and system up-time every 10 seconds..
+Description=Logging system data and time, logged-in users and system up-time every 10 seconds.
 After=syslog.target
 
 [Service]
