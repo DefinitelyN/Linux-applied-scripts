@@ -20,7 +20,7 @@ then
 
     while true
     do
-	if [[ `stat -c "%s" "$dirWork/$fileName"` -lt 1024*1024 ]] # Check main file size.
+	if [ `stat -c "%s" "$dirWork/$fileName"` -lt 1024*1024 ] # Check main file size.
 	then
 	    echo "---Start of log---" >> "$dirWork/$fileName"
 	    echo "Current date and time: "$(date +%d.%m.%Y\ %H:%M:%S) >> "$dirWork/$fileName"
@@ -28,7 +28,7 @@ then
 	    echo "System uptime: "$(uptime) >> "$dirWork/$fileName"
 	    echo "---End of log---" >> "$dirWork/$fileName"
 	    echo "" >> "$dirWork/$fileName"
-	elif [[ `stat -c "%s" "$dirWork/$fileName"` -ge 1024*1024 ]]
+	elif [ `stat -c "%s" "$dirWork/$fileName"` -ge 1024*1024 ]
 	then
 	    cp -f "$dirWork/$fileName" "$dirWork/$fileNameOld"
 	    echo -n "" > "$dirWork/$fileName"

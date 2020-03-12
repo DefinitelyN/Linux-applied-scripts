@@ -7,12 +7,12 @@
 echo "---"
 echo -n "Enter desired length of passwords (8 to 16): "
 read "length"
-lengthCheck=$(expr "$length" : "[0-9]*$") # Check for non-empty string and non-digit characters.
+lengthCheck=$(expr "$length" : "^[[:digit:]]*$") # Check for non-empty string and non-digit characters.
 echo "---"
 
 echo -n "Enter desired quantity of passwords (1 to 100): "
 read "quantity"
-quantityCheck=$(expr "$quantity" : "[0-9]*$") # Check for non-empty string and non-digit characters.
+quantityCheck=$(expr "$quantity" : "^[[:digit:]]*$") # Check for non-empty string and non-digit characters.
 echo "---"
 
 if [[ $lengthCheck -gt 0 && $quantityCheck -gt 0 && "$length" -ge 8 && "$length" -le 16 && \
@@ -21,7 +21,7 @@ then
     dirDefault=$(getent passwd $(whoami) | cut -d: -f6) # Set target directory by default.
     echo -n "Enter path (full) where the file with generated passwords will be stored (or leave it blank - your home dir will be set): "
     read dirUser
-    if [[ -z "$dirUser" ]] # Select final working directory.
+    if [ -z "$dirUser" ] # Select final working directory.
     then
 	dirWork="$dirDefault"
     else
@@ -32,7 +32,7 @@ then
     echo "File with generated passwords will be stored at: ${dirWork}"
     available=$(df -P "$dirWork" | awk 'END{print $4}')
     echo "Up to $available KB available here."
-    if (($available > 0)) # Check space availability.
+    if [ $available -gt 0 ] # Check space availability.
     then
 	echo -n "" > "$dirWork/GeneratedPasswords.txt"
 	echo "Generating..."
@@ -43,7 +43,7 @@ then
 	do
 	    tempPass=$(head /dev/urandom | tr -dc [:lower:][:upper:][:digit:] | head -c $length)
 	    echo $tempPass >> "$dirWork/TEST.txt"
-	    if [[ $tempPass =~ [a-z] && $tempPass =~ [A-Z] && $tempPass =~ [0-9] ]]
+	    if [[ $tempPass =~ [[:lower:]] && $tempPass =~ [[:upper:]] && $tempPass =~ [[:digit:]] ]]
 	    then
 		echo $tempPass >> "$dirWork/GeneratedPasswords.txt"
 		i=$(($i+1))

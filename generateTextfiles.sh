@@ -8,7 +8,7 @@
 echo "---"
 echo -n "Enter desired quantity of files (1 to 10): "
 read "quantity"
-quantityCheck=$(expr "$quantity" : "[0-9]*$") # Check for non-empty string and non-digit characters.
+quantityCheck=$(expr "$quantity" : "^[[:digit:]]*$") # Check for non-empty string and non-digit characters.
 echo "---"
 
 if [[ $quantityCheck -gt 0  && "$quantity" -ge 1 && "$quantity" -le 10 ]] # Check out-of-range quantity.
@@ -17,7 +17,7 @@ then
     dirDefault=$(getent passwd $(whoami) | cut -d: -f6) # Set target directory by default.
     echo -n "Enter path (full) where generated files will be stored (or leave it blank - your home dir will be set): "
     read "dirUser"
-    if [[ -z "$dirUser" ]] # Select final working directory.
+    if [ -z "$dirUser" ] # Select final working directory.
     then
 	dirWork="$dirDefault"
     else
@@ -28,11 +28,11 @@ then
     echo "Generated files will be stored at: ${dirWork}"
 
     available=$(df -P "$dirWork" | awk 'END{print $4}')
-    totalSize=$((quantity * 20000))
+    totalSize=$((quantity * 20480))
     echo "Up to $available KB available here."
     echo "Up to $totalSize KB required for $quantity files."
     echo "---"
-    if (($available > $totalSize)) # Check space availability.
+    if [ $available -gt $totalSize ] # Check space availability.
     then
 	echo -n "Would you like to write files with zero bytes or random characters? (z/r): "
 	read fill
